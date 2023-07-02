@@ -1,11 +1,20 @@
-const fs = require("fs");
+//modules
+const fs = require("fs").promises;
 const express = require("express");
+const bodyParser = require("body-parser");
+
+//routes
+const usersRoute = require("./routes/users");
 
 const hostname = "127.0.0.1";
 const app = express();
 const port = 3000;
 
 app.use(express.static("public"));
+app.use(bodyParser.json());
+
+//routes
+app.use("/users", usersRoute);
 
 //Global Objects - objects available on all modules
 console.log(__dirname);
@@ -23,6 +32,9 @@ console.log(__filename);
 // //reading a file contents
 // const data = fs.readFileSync(__dirname + "/hello.js", "utf8");
 // console.log(data);
+// fs.readFile(__dirname + '/hello.js','utf-8',(err,txt) =>{
+//   console.log(txt)
+// })
 // //Delete a file
 // setTimeout(() => {
 //   fs.unlink(__dirname + "/new.js", (err) => {
@@ -30,9 +42,22 @@ console.log(__filename);
 //   });
 // }, 10000);
 
+const users = [
+  {
+    firstName: "John",
+    lastName: "Doe",
+    age: 24,
+  },
+  {
+    firstName: "Jane",
+    lastName: "Doe",
+    age: 15,
+  },
+];
+
 //express
-app.get("/", (req, res) => {
-  res.send("Welcome Bryan");
+app.get("/", async (req, res) => {
+  res.send(await fs.readFile("./home.html", "utf-8"));
 });
 
 app.listen(port, () => {
