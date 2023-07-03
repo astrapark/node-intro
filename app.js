@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 
 //routes
 const usersRoute = require("./routes/users");
+const loginRoute = require("./auth/users");
 
 const hostname = "127.0.0.1";
 const app = express();
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 //routes
 app.use("/users", usersRoute);
+app.use("/user", loginRoute);
 
 //Global Objects - objects available on all modules
 console.log(__dirname);
