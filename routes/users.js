@@ -1,9 +1,14 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
+
+const {
+  users,
+  createUser,
+  findUser,
+  updateAUser,
+  deleteUser,
+} = require("../controllers/users");
 
 const router = express.Router();
-
-let users = [];
 
 //get all users
 router.get("/", (req, res) => {
@@ -11,46 +16,15 @@ router.get("/", (req, res) => {
 });
 
 //add a user
-router.post("/", (req, res) => {
-  const user = req.body;
-  const userId = uuidv4();
-  const userWithId = { ...user, id: userId };
-  users.push(userWithId);
-  console.log(userWithId);
-  res.send(`User with the first name ${user.firstName} added to the database`);
-});
+router.post("/", createUser);
 
 //Getting specific user
-router.get("/:id", (req, res) => {
-  const findUser = users.find((user) => user.id == req.params.id);
-  res.send(
-    `You are ${findUser.firstName} ${findUser.lastName} of age ${findUser.age}`
-  );
-});
+router.get("/:id", findUser);
 
 //update a user
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  const { firstName, lastName, age } = req.body;
-  const updateUser = users.find((user) => user.id == id);
-
-  if (firstName) {
-    updateUser.firstName = firstName;
-  }
-  if (lastName) {
-    updateUser.lastName = lastName;
-  }
-  if (age) {
-    updateUser.age = age;
-  }
-});
+router.patch("/:id", updateAUser);
 
 //deleting a user
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-
-  users = users.filter((user) => user.id != id);
-  res.send(filteredUsers);
-});
+router.delete("/:id", deleteUser);
 
 module.exports = router;
